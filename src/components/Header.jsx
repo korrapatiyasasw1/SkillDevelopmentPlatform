@@ -1,72 +1,91 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 
-// Define the styled header component
+// Styled header with background color and flexbox
 const Styled = styled.header`
-  background-color:burlywood;
+  background-color: #00B1AA;
   color: white;
-  padding: 0;
-  margin:0;
+  padding: 5px;
+  margin: 0;
   text-align: center;
-  display:flex;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
-const Div1 = styled.h1`
-  background-color:red;
-  font-size:20px;
-`
-const  Nav = styled.nav`
-ul{
-  display:flex;
-  flex-direction:row;
-  list-style:none;
-  margin:0;
-  padding:1.5rem;
+const Div1 = styled.div`
+  font-size: 1.5rem;
+  font-style: italic;
+  padding: 10px;
+  color: white;
+`;
 
-li{
-  margin:auto;
-  padding:1.5rem;
-}
-}
+// Styled Nav container for the list
+const Nav = styled.nav`
+  ul {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    margin: 0;
+    padding: 1.5rem;
+  }
 
-` 
+  li {
+    margin: 0 15px; /* spacing between items */
+  }
+`;
 
+// Styled NavLink for individual items with common styling
+const StyledNavLink = styled(NavLink)`
+  color: purple;
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-family: Arial, sans-serif;
+  font-style: italic;
+
+  &:hover {
+    color: darkorchid; /* Change color on hover */
+  }
+
+  &.active {
+    color: #ff6347; /* Active link color */
+  }
+`;
 
 const Header = () => {
   return (
-
     <Styled>
-      <Div1><h1>Talent Track</h1></Div1>
+      <Div1>
+        <h1>Talent Track</h1>
+      </Div1>
       <Nav>
-        <nav>
         <ul>
           <li>
-            <NavLink to="/" style={{ color: 'white', textDecoration: 'none' }}>
+            <StyledNavLink exact to="/" activeClassName="active">
               Home
-            </NavLink>
+            </StyledNavLink>
           </li>
           <li>
-            <NavLink to="/about"  style = {{color:'purple',textDecoration:'none'}}>
+            <StyledNavLink to="/About" activeClassName="active">
               About
-            </NavLink>
+            </StyledNavLink>
           </li>
           <li>
-            <NavLink to="/login" >
-              About
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/signup" >
+            <StyledNavLink to="/signup" activeClassName="active">
               Signup
-            </NavLink>
+            </StyledNavLink>
           </li>
           <li>
-            <NavLink to="/login" >
+            <StyledNavLink to="/login" activeClassName="active">
               Login
-            </NavLink>
+            </StyledNavLink>
+          </li>
+          <li>
+            <StyledNavLink to="/dashboard" activeClassName="active">
+              Dashboard
+            </StyledNavLink>
           </li>
         </ul>
-        </nav>
       </Nav>
     </Styled>
   );
