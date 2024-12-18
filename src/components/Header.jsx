@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 
-// Styled header with background color and flexbox
 const Styled = styled.header`
   background-color: #00B1AA;
   color: white;
@@ -20,7 +19,6 @@ const Div1 = styled.div`
   color: white;
 `;
 
-// Styled Nav container for the list
 const Nav = styled.nav`
   ul {
     display: flex;
@@ -29,13 +27,11 @@ const Nav = styled.nav`
     margin: 0;
     padding: 1.5rem;
   }
-
   li {
-    margin: 0 15px; /* spacing between items */
+    margin: 0 15px;
   }
 `;
 
-// Styled NavLink for individual items with common styling
 const StyledNavLink = styled(NavLink)`
   color: purple;
   text-decoration: none;
@@ -44,11 +40,11 @@ const StyledNavLink = styled(NavLink)`
   font-style: italic;
 
   &:hover {
-    color: darkorchid; /* Change color on hover */
+    color: darkorchid; 
   }
 
   &.active {
-    color: #ff6347; /* Active link color */
+    color: #ff6347; 
   }
 `;
 
@@ -60,16 +56,16 @@ const Header = () => {
       </Div1>
       <Nav>
         <ul>
-          <li>
+           {/* <li>
             <StyledNavLink exact to="/" activeClassName="active">
               Home
             </StyledNavLink>
-          </li>
-          <li>
+          </li> */}
+          {/* <li>
             <StyledNavLink to="/About" activeClassName="active">
               About
             </StyledNavLink>
-          </li>
+          </li> */}
           <li>
             <StyledNavLink to="/signup" activeClassName="active">
               Signup
@@ -80,11 +76,11 @@ const Header = () => {
               Login
             </StyledNavLink>
           </li>
-          <li>
+          {/* <li>
             <StyledNavLink to="/dashboard" activeClassName="active">
               Dashboard
             </StyledNavLink>
-          </li>
+          </li> */}
         </ul>
       </Nav>
     </Styled>

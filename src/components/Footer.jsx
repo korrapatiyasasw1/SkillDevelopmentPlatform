@@ -1,24 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
-
 const FooterContainer = styled.footer`
   background-color: #002a32;
   color: #ffffff;
   padding: 40px 20px;
   text-align: center;
 `;
-
 const FooterContent = styled.div`
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 20px;
 `;
-
 const Section = styled.div`
   flex: 1;
   min-width: 150px;
-
   h4 {
     margin-bottom: 10px;
     font-size: 18px;
@@ -132,4 +128,4 @@ const Footer = () => {
   );
 };
 
-export default Footer
+export default Footer;

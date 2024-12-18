@@ -1,124 +1,90 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import styled from "styled-components";
+import { useNavigate } from 'react-router-dom';
 
-const FormContainer = styled.form`
-  display: flex;
-  padding: 50px;
-  padding-right: 50px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  margin: 0 auto;
-  flex-direction: column;
-  width: 200px;
-  background-image: linear-gradient(red, yellow, blue);
-`;
+const Login = () => {
+  const navigate = useNavigate();  // Initialize the useNavigate hook
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-const InputField = styled.input`
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  outline: none;
-  &::placeholder {
-    color: #999;
-  }
-  &:focus {
-    border-color: #5f27cd;
-  }
-`;
+  const handleUsernameChange = (e) => setUsername(e.target.value);
+  const handlePasswordChange = (e) => setPassword(e.target.value);
 
-const ErrorMessage = styled.span`
-  color: red;
-  font-size: 12px;
-`;
+  // Handle form submission (login)
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-const SubmitButton = styled.button`
-  background-color: #5f27cd; /* Adjust background color as desired */
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.2s ease-in-out;
-  margin-top: 10px; /* Add some margin for spacing */
+    // Basic validation
+    if (!username || !password) {
+      setError('Both username and password are required.');
+      return;
+    }
 
-  &:hover {
-    background-color: #4e22b4; /* Slightly darker shade on hover */
-  }
-`;
+    setLoading(true);
+    setError('');  // Reset error message before making request
 
-function Login() {
-  const [user, setUser] = useState({}); // Can be used for storing logged in user data (optional)
-  const [loginData, setLoginData] = useState({
-    Email: "",
-    Password: "",
-  });
-  const [errors, setErrors] = useState({});
-  const apiurl = "https://server-7tfl.onrender.com/users"; 
+    try {
+      // Make a GET request to fetch the users data
+      const response = await axios.get('https://server-7tfl.onrender.com/users');
+      
+      // Find the user matching the entered username and password
+      const user = response.data.find(
+        (user) => user.username === username && user.password === password
+      );
 
-  const handleLogin = async (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
-    if (validateForm(loginData)) {
-      try {
-        const response = await axios.get(apiurl, loginData);
-        // Handle successful login (e.g., set user data in state, redirect to dashboard)
-        if(response.data.Email=== loginData.Email && response.data.Password === loginData.Password)
-        {
-        console.log("Login successful!", response.data);
-                
-        }
-        // ... (redirect or store user data)
-      } catch (error) {
-        console.error("Error logging in:", error);
-        // Handle login errors (e.g., display error message)
-        setErrors({ login: "Invalid email or password" });
+      // If user found and credentials match, store user data in localStorage and navigate to dashboard
+      if (user) {
+        // Store user data in localStorage
+        localStorage.setItem('user', JSON.stringify(user));
+        alert('Login successful!');
+        navigate('/dashboard');  // Redirect to dashboard after login
+      } else {
+        setError('Invalid username or password. Please try again.');
       }
+    } catch (err) {
+      // Handle errors (e.g., server down, network issues)
+      setError('An error occurred. Please try again later.');
+    } finally {
+      setLoading(false);  // Reset loading state after request completes
     }
-  };
-
-  const validateForm = (data) => {
-    let errors = {};
-
-    if (!data.Email.trim()) {
-      errors.Email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.Email)) {
-      errors.Email = "Invalid email format";
-    }
-
-    if (!data.Password) {
-      errors.Password = "Password is required";
-    }
-
-    setErrors(errors);
-    return Object.keys(errors).length === 0; // Return true if no errors
   };
 
   return (
-    <div>
-      <FormContainer>
-        <form onSubmit={handleLogin}>
-          {errors.login && <ErrorMessage>{errors.login}</ErrorMessage>}
-          <InputField
-            type="email"
-            placeholder="Email"
-            value={loginData.Email}
-            onChange={(e) => setLoginData({ ...loginData, Email: e.target.value })}
+    <div className="login-container">
+      <h2>Login</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            value={username}
+            onChange={handleUsernameChange}
+            required
           />
-          <InputField
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="password">Password</label>
+          <input
             type="password"
-            placeholder="Password"
-            value={loginData.Password}
-            onChange={(e) =>
-              setLoginData({ ...loginData, Password: e.target.value })}
+            id="password"
+            value={password}
+            onChange={handlePasswordChange}
+            required
           />
-          <SubmitButton type="submit">Login</SubmitButton>
-        </form>
-      </FormContainer>
+        </div>
+
+        {error && <div className="error-message">{error}</div>}
+
+        <button type="submit" disabled={loading}>
+          {loading ? 'Logging in...' : 'Login'}
+        </button>
+      </form>
     </div>
   );
-}
+};
 
 export default Login;

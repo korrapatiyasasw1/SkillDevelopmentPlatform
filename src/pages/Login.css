@@ -1,0 +1,68 @@
+.login-form {
+    width: 300px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f4f7fa;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 5px 0;
+  }
+  
+  input[type="email"]:focus,
+  input[type="password"]:focus {
+    border-color: #00B1AA;
+    outline: none;
+  }
+  
+  .error-message {
+    color: red;
+    font-size: 12px;
+  }
+  
+  .success-message {
+    color: green;
+    font-size: 14px;
+  }
+  
+  .btn-login {
+    width: 100%;
+    padding: 10px;
+    background-color:#00B1AA;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-login:hover {
+    background-color: #4e22b4;
+  }
+  
+  p {
+    text-align: center;
+    font-size: 14px;
+  }
+  
+  p a {
+    color: #5f27cd;
+    text-decoration: none;
+  }
+  
+  p a:hover {
+    text-decoration: underline;
+  }
+  

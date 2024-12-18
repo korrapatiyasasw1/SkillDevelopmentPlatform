@@ -1,303 +1,315 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+// import React, { useState, useEffect, useContext } from "react";
+// import styled from "styled-components";
+// import axios from "axios";
 
-const Profile = () => {
-  const [user, setUser] = useState({
-    registrationNumber: '',
-    studentName: '',
-    email: '',
-    year: '',
-    profilePicture: 'https://via.placeholder.com/100', // Default image URL
-  });
-  const [isEditing, setIsEditing] = useState(true);
-  const [formData, setFormData] = useState(user);
-  const [error, setError] = useState(null);
 
-  const api_url = "http://localhost:3000/profiles" // Ensure this is correct API URL
+// const Container = styled.div`
+//   max-width: 800px;
+//   margin: 100px auto;
+//   padding: 20px;
+//   font-family: Arial, sans-serif;
+//   background: rgb(255, 247, 177);
+//   border-radius: 8px;
+//   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+// `;
 
-  // Fetch user data from API
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(api_url);
-        if (response.status === 200) {
-          setUser(response.data);
-          setFormData(response.data);
-        } else {
-          setError('Failed to fetch user data. Please try again later.');
-        }
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-        if (error.response) {
-          if (error.response.status === 404) {
-            setError('User not found. Please check the URL or the user ID.');
-          } else {
-            setError(`Error: ${error.response.status} - ${error.response.data}`);
-          }
-        } else if (error.request) {
-          setError('No response received. Please check the server.');
-        } else {
-          setError('An unknown error occurred. Please try again later.');
-        }
-      }
-    };
+// const Title = styled.h1`
+//   text-align: center;
+//   color: rgb(158, 143, 0);
+//   margin-bottom: 20px;
+// `;
 
-    fetchUserData();
-  }, []);
+// const Section = styled.div`
+//   margin-bottom: 20px;
+// `;
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+// const Label = styled.label`
+//   font-weight: bold;
+// `;
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setFormData({ ...formData, profilePicture: imageUrl });
-    }
-  };
+// const Input = styled.input`
+//   display: block;
+//   width: 100%;
+//   padding: 8px;
+//   margin-top: 5px;
+//   margin-bottom: 10px;
+//   border: 1px solid #ccc;
+//   border-radius: 4px;
+// `;
 
-  const saveChanges = async () => {
-    try {
-      setError(null); // Reset previous error message
+// const ProfilePic = styled.img`
+//   width: 150px;
+//   height: 150px;
+//   border-radius: 50%;
+//   object-fit: cover;
+//   margin-bottom: 15px;
+// `;
 
-      const response = await axios.put(api_url, formData); // Assuming user ID is 1
-      console.log('API Response:', response);
+// const Button = styled.button`
+//   padding: 10px 15px;
+//   border: none;
+//   border-radius: 4px;
+//   background-color: ${(props) => (props.danger ? "#ff4d4f" : "#4caf50")};
+//   color: white;
+//   font-weight: bold;
+//   cursor: pointer;
 
-      if (response.status === 200 || response.status === 201) {
-        setUser(formData);
-        setIsEditing(false);
-      } else {
-        setError('Failed to update profile. Please try again.');
-      }
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      setError('Failed to update profile. Please try again later.');
-    }
-  };
+//   &:disabled {
+//     background-color: #ccc;
+//     cursor: not-allowed;
+//   }
 
-  const handleDeleteProfile = async () => {
-    if (window.confirm('Are you sure you want to delete your profile?')) {
-      try {
-        const response = await axios.delete(api_url);
-        console.log('API Response:', response);
-        if (response.status === 200) {
-          setUser({
-            registrationNumber: '',
-            studentName: '',
-            email: '',
-            year: '',
-            profilePicture: 'https://via.placeholder.com/100', // Default image URL
-          }); // Clear user data
-        } else {
-          setError('Failed to delete profile. Please try again.');
-        }
-      } catch (error) {
-        console.error('Error deleting profile:', error);
-        setError('Failed to delete profile. Please try again later.');
-      }
-    }
-  };
+//   &:not(:last-child) {
+//     margin-right: 10px;
+//   }
+// `;
 
-  return (
-    <div style={styles.container}>
-      <h1 style={styles.heading}>My Profile</h1>
-      <div style={styles.profileCard}>
-        <div style={styles.avatar}>
-          <img
-            src={formData.profilePicture} // Use dynamic profile picture URL
-            alt="User Avatar"
-            style={styles.avatarImage}
-          />
-          <div>
-            <label style={styles.uploadLabel} htmlFor="profilePic">
-              Upload Profile Picture
-            </label>
-            <input
-              type="file"
-              id="profilePic"
-              accept="image/*"
-              style={styles.uploadInput}
-              onChange={handleImageUpload}
-            />
-          </div>
-        </div>
-        <div style={styles.info}>
-          {error && <div style={styles.errorMessage}>{error}</div>}
+// const Error = styled.p`
+//   color: red;
+// `;
 
-          {isEditing ? (
-            <div>
-              <h2 style={styles.sectionHeading}>Edit Personal Info</h2>
-              <label>Student Name:</label>
-              <input
-                type="text"
-                name="studentName"
-                value={formData.studentName}
-                onChange={handleInputChange}
-                style={styles.input}
-              />
+// const EditIcon = styled(FaEdit)`
+//   cursor: pointer;
+//   color: rgb(158, 143, 0);
+//   margin-left: 10px;
+// `;
 
-              <h2 style={styles.sectionHeading}>Edit Contact Info</h2>
-              <label>Email:</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                style={styles.input}
-              />
+// const ModalContainer = styled.div`
+//   padding: 20px;
+//   animation: dropIn 0.5s ease-out forwards; /* Drop animation */
 
-              <button style={styles.saveButton} onClick={saveChanges}>
-                Save
-              </button>
-              <button
-                style={styles.cancelButton}
-                onClick={() => setIsEditing(false)}
-              >
-                Cancel
-              </button>
-              {error && <div style={styles.errorMessage}>{error}</div>}
-            </div>
-          ) : (
-            <div>
-              <h2 style={styles.sectionHeading}>Personal Info</h2>
-              <p>
-                <strong>Student Name:</strong> {user.studentName}
-              </p>
-              <p>
-                <strong>Registration Number:</strong> {user.registrationNumber}
-              </p>
-              <p>
-                <strong>Year:</strong> {user.year}
-              </p>
+//   @keyframes dropIn {
+//     0% {
+//       transform: translateY(-100px);
+//       opacity: 0;
+//     }
+//     100% {
+//       transform: translateY(0);
+//       opacity: 1;
+//     }
+//   }
+// `;
 
-              <h2 style={styles.sectionHeading}>Contact Info</h2>
-              <p>
-                <strong>Email:</strong> {user.email}
-              </p>
+// Modal.setAppElement("#root"); // Set the app element for accessibility
 
-              <button
-                style={styles.editButton}
-                onClick={() => setIsEditing(true)}
-              >
-                Edit Profile
-              </button>
-              <button style={styles.deleteButton} onClick={handleDeleteProfile}>
-                Delete Profile
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
+// function Profile() {
+//   const { state, updateProfile } = useAuth(); // Access state from AuthContext
+//   const user = state.user; // Get user from context
+//   const [formData, setFormData] = useState(user || {});
+//   const [profilePic, setProfilePic] = useState(user?.profilePic || "");
+//   const [editMode, setEditMode] = useState(false);
+//   const [sectionToEdit, setSectionToEdit] = useState(null); // Tracks which section to edit
+//   const [error, setError] = useState("");
 
-const styles = {
-  container: {
-    textAlign: 'center',
-    padding: '20px',
-    fontFamily: 'Arial, sans-serif',
-  },
-  heading: {
-    color: '#5a2d82',
-  },
-  profileCard: {
-    maxWidth: '400px',
-    margin: '20px auto',
-    padding: '20px',
-    border: '1px solid #ddd',
-    borderRadius: '8px',
-    backgroundColor: '#f9f9f9',
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-  },
-  avatar: {
-    textAlign: 'center',
-    marginBottom: '20px',
-  },
-  avatarImage: {
-    width: '100px',
-    height: '100px',
-    borderRadius: '50%',
-    border: '2px solid #ddd',
-  },
-  uploadLabel: {
-    display: 'block',
-    marginTop: '10px',
-    color: '#007bff',
-    cursor: 'pointer',
-  },
-  uploadInput: {
-    display: 'none',
-  },
-  info: {
-    textAlign: 'left',
-  },
-  sectionHeading: {
-    color: '#5a2d82',
-    marginBottom: '10px',
-  },
-  input: {
-    display: 'block',
-    width: '100%',
-    padding: '8px',
-    marginBottom: '10px',
-    border: '1px solid #ccc',
-    borderRadius: '4px',
-  },
-  editButton: {
-    display: 'block',
-    width: '100%',
-    marginTop: '10px',
-    padding: '10px',
-    backgroundColor: '#007bff',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    fontSize: '16px',
-  },
-  saveButton: {
-    display: 'inline-block',
-    marginTop: '10px',
-    padding: '10px',
-    backgroundColor: '#28a745',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    fontSize: '16px',
-    marginRight: '10px',
-  },
-  cancelButton: {
-    display: 'inline-block',
-    marginTop: '10px',
-    padding: '10px',
-    backgroundColor: '#6c757d',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    fontSize: '16px',
-  },
-  deleteButton: {
-    display: 'block',
-    width: '100%',
-    marginTop: '10px',
-    padding: '10px',
-    backgroundColor: '#f44336',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    fontSize: '16px',
-  },
-  errorMessage: {
-    color: 'red',
-    marginTop: '10px',
-    fontWeight: 'bold',
-  },
-};
+//   useEffect(() => {
+//     setFormData(user);
+//     setProfilePic(user?.profilePic);
+//   }, [user]);
 
-export default Profile;
+//   const handleChange = (e) => {
+//     const { name, value, type, checked } = e.target;
+
+//     // If the input is a checkbox, update based on checked value
+//     if (type === "checkbox") {
+//       const [section, index, field] = name.split(".");
+//       setFormData((prevData) => {
+//         const updatedLanguages = [...prevData.languages];
+//         updatedLanguages[index][field] = checked;
+//         return { ...prevData, languages: updatedLanguages };
+//       });
+//     } else {
+//       // For regular text inputs
+//       const [section, field] = name.split(".");
+//       setFormData((prevData) => ({
+//         ...prevData,
+//         [section]: { ...prevData[section], [field]: value },
+//       }));
+//     }
+//   };
+
+//   const handleProfilePicChange = (e) => {
+//     const file = e.target.files[0];
+//     if (file) {
+//       const reader = new FileReader();
+//       reader.onload = () => setProfilePic(reader.result);
+//       reader.readAsDataURL(file);
+//     }
+//   };
+
+//   const handleSave = async () => {
+//     try {
+//       const updatedUser = { ...formData, profilePic };
+//       await axios.put(`http://localhost:3000/users/${user.id}`, updatedUser);
+//       login(updatedUser); // Update the user in AuthContext
+//       setEditMode(false); // Exit edit mode
+//       setSectionToEdit(null); // Reset the section to edit
+//       alert("Profile updated successfully!");
+//     } catch (err) {
+//       console.error("Error updating profile:", err);
+//       setError("Failed to update profile.");
+//     }
+//   };
+
+//   const handleDelete = async () => {
+//     try {
+//       await axios.delete(`http://localhost:3000/users/${user.id}`);
+//       alert("Profile deleted successfully!");
+//       login(null); // Log out the user by setting user to null in AuthContext
+//     } catch (err) {
+//       console.error("Error deleting profile:", err);
+//       setError("Failed to delete profile.");
+//     }
+//   };
+
+//   const handleEditSection = (section) => {
+//     setSectionToEdit(section);
+//     setEditMode(true); // Enable edit mode
+//   };
+
+//   return (
+//     <Container>
+//       <Title>My Profile</Title>
+
+//       {error && <Error>{error}</Error>}
+
+//       {/* Profile Picture Section */}
+//       <Section>
+//         <ProfilePic src={profilePic} alt="Profile" />
+//         <EditIcon onClick={() => handleEditSection("profilePic")} />
+//       </Section>
+
+//       {/* Personal Details Section */}
+//       <Section>
+//         <Label>Name:</Label>
+//         <span>{formData.name}</span>
+//         <EditIcon onClick={() => handleEditSection("personalDetails")} />
+//       </Section>
+
+//       <Section>
+//         <Label>Email:</Label>
+//         <span>{formData.email}</span>
+//       </Section>
+
+//       <Section>
+//         <Label>Phone:</Label>
+//         <span>{formData.phone}</span>
+//       </Section>
+
+//       {/* Languages Section */}
+//       <Section>
+//         <Label>Languages Known:</Label>
+//         <ul>
+//           {formData.languages && formData.languages.length > 0 ? (
+//             formData.languages.map((lang, index) => (
+//               <li key={index}>
+//                 <span>{lang.language}</span> - Read: {lang.read ? "Yes" : "No"}{" "}
+//                 / Write: {lang.write ? "Yes" : "No"} / Speak:{" "}
+//                 {lang.speak ? "Yes" : "No"}
+//               </li>
+//             ))
+//           ) : (
+//             <span>No languages added</span>
+//           )}
+//         </ul>
+//         <EditIcon onClick={() => handleEditSection("languages")} />
+//       </Section>
+//       <Button danger onClick={handleDelete}>
+//         Delete Profile
+//       </Button>
+
+//       {/* Modal for Editing */}
+//       <Modal
+//         isOpen={editMode}
+//         onRequestClose={() => setEditMode(false)}
+//         contentLabel="Edit Profile Section"
+//       >
+//         <ModalContainer>
+//           <h2>Edit {sectionToEdit}</h2>
+//           {sectionToEdit === "profilePic" && (
+//             <div>
+//               <Label>Upload New Profile Picture:</Label>
+//               <Input
+//                 type="file"
+//                 accept="image/*"
+//                 onChange={handleProfilePicChange}
+//               />
+//             </div>
+//           )}
+//           {sectionToEdit === "personalDetails" && (
+//             <div>
+//               <Label>Name:</Label>
+//               <Input
+//                 type="text"
+//                 name="personalDetails.name"
+//                 value={formData.name || ""}
+//                 onChange={handleChange}
+//               />
+//               <Label>Email:</Label>
+//               <Input
+//                 type="email"
+//                 name="personalDetails.email"
+//                 value={formData.email || ""}
+//                 onChange={handleChange}
+//               />
+//               <Label>Phone:</Label>
+//               <Input
+//                 type="text"
+//                 name="personalDetails.phone"
+//                 value={formData.phone || ""}
+//                 onChange={handleChange}
+//               />
+//             </div>
+//           )}
+//           {sectionToEdit === "languages" && (
+//             <div>
+//               {formData.languages &&
+//                 formData.languages.map((lang, index) => (
+//                   <div key={index}>
+//                     <Label>Language {index + 1}:</Label>
+//                     <Input
+//                       type="text"
+//                       name={`languages.${index}.language`}
+//                       value={lang.language}
+//                       onChange={handleChange}
+//                     />
+//                     <label>
+//                       Read
+//                       <input
+//                         type="checkbox"
+//                         name={`languages.${index}.read`}
+//                         checked={lang.read}
+//                         onChange={handleChange}
+//                       />
+//                     </label>
+//                     <label>
+//                       Write
+//                       <input
+//                         type="checkbox"
+//                         name={`languages.${index}.write`}
+//                         checked={lang.write}
+//                         onChange={handleChange}
+//                       />
+//                     </label>
+//                     <label>
+//                       Speak
+//                       <input
+//                         type="checkbox"
+//                         name={`languages.${index}.speak`}
+//                         checked={lang.speak}
+//                         onChange={handleChange}
+//                       />
+//                     </label>
+//                   </div>
+//                 ))}
+//             </div>
+//           )}
+
+//           <Button onClick={handleSave}>Save Changes</Button>
+
+//           <Button onClick={() => setEditMode(false)}>Cancel</Button>
+//         </ModalContainer>
+//       </Modal>
+//     </Container>
+//   );
+// }
+// export default Profile;

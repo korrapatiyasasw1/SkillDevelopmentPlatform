@@ -6,7 +6,8 @@ import Signup from "../pages/Signup";
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
 import About from "../pages/About";
-import Profile from "../pages/Profile";
+import LandingPage from "../pages/LandingPage";
+import Internships from "../pages/Internships";
 function AppRouter() {
   const loggedUser = true;
   return (
@@ -16,12 +17,16 @@ function AppRouter() {
         {loggedUser && (
            <MainLayout>
            <Routes>
-             <Route index element={<Home />} />
-             <Route path="/About" element={<About />} /> 
+            <Route path = "/LandingPage" element = {<LandingPage/>}></Route>
+             <Route path="/Dashboard/About" element={<About />} /> 
              <Route path="/Signup" element={<Signup />} /> 
              <Route path="/Login" element={<Login />} /> 
              <Route path="/Dashboard" element={<Dashboard />} /> 
-             <Route path="/Dashboard/Profile" element={<Profile />} />
+              {/* <Route path="/Dashboard/Profile" element={<Profile />} />  */}
+             <Route path="/Dashboard/Home" element={<Home />} />
+             <Route path="/Dashboard/Internships" element={<Internships />} />
+
+
            </Routes>
            </MainLayout>
         )}  
@@ -31,4 +36,4 @@ function AppRouter() {
   );
 }
 
-export default AppRouter;
+ export default AppRouter;
