@@ -116,7 +116,6 @@ const Footer = () => {
             <a href="#"><i className="fab fa-instagram"></i></a>
             <a href="#"><i className="fab fa-twitter"></i></a>
             <a href="#"><i className="fab fa-linkedin"></i></a>
-            <a href="#"><i className="fab fa-tiktok"></i></a>
             <a href="#"><i className="fab fa-youtube"></i></a>
           </SocialLinks>
         </Section>

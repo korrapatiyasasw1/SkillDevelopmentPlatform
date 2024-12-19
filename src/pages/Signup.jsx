@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';  // Import the useNavigate hook
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
 const Signup = () => {
-  const navigate = useNavigate();  // Initialize the useNavigate hook
+  const navigate = useNavigate();
 
-  // State for form fields and loading/error states
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [username, setUsername] = useState('');
@@ -13,34 +13,34 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');  // State for success message
 
-  // Handle input changes
   const handleFirstNameChange = (e) => setFirstName(e.target.value);
   const handleLastNameChange = (e) => setLastName(e.target.value);
   const handleUsernameChange = (e) => setUsername(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
   const handleConfirmPasswordChange = (e) => setConfirmPassword(e.target.value);
 
-  // Handle form submission (sign-in)
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Basic validation for form fields
     if (!firstName || !lastName || !username || !password || !confirmPassword) {
       setError('All fields are required.');
+      setSuccessMessage('');  // Clear success message if there's an error
       return;
     }
 
     if (password !== confirmPassword) {
       setError('Passwords do not match.');
+      setSuccessMessage('');  // Clear success message if passwords don't match
       return;
     }
 
     setLoading(true);
     setError('');
+    setSuccessMessage('');  // Clear previous success message
 
     try {
-      // Send a POST request to the sign-up endpoint using Axios
       const response = await axios.post('https://server-7tfl.onrender.com/users', {
         firstName,
         lastName,
@@ -48,16 +48,21 @@ const Signup = () => {
         password,
       });
 
-      // If the response is successful (status 201 indicates user created)
       if (response.status === 201) {
-        alert('Sign-up successful!');
-        console.log(response.data); // You can store the response or redirect here
-
-        // Redirect to the login page after successful sign-up
-        navigate('/Login');
+        // Store the user details in localStorage (if applicable)
+        const { user, token } = response.data; // Assuming the backend sends a user object and a JWT token
+        
+        localStorage.setItem('user', JSON.stringify(user));  // Store the user data
+        localStorage.setItem('authToken', token); // Store the token for authentication
+        
+        setSuccessMessage('Sign-up successful! You can now log in.');
+        
+        // Navigate to login page after a successful sign-up
+        setTimeout(() => {
+          navigate('/Login');
+        }, 2000); // Navigate after 2 seconds
       }
     } catch (err) {
-      // Handle error responses (e.g., user already exists, server error)
       if (err.response) {
         setError(err.response.data.message || 'Sign-up failed. Please try again.');
       } else {
@@ -69,10 +74,10 @@ const Signup = () => {
   };
 
   return (
-    <div className="sign-in-container">
+    <SignupContainer>
       <h2>Sign Up</h2>
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
+        <InputWrapper>
           <label htmlFor="firstName">First Name</label>
           <input
             type="text"
@@ -81,9 +86,9 @@ const Signup = () => {
             onChange={handleFirstNameChange}
             required
           />
-        </div>
+        </InputWrapper>
 
-        <div className="form-group">
+        <InputWrapper>
           <label htmlFor="lastName">Last Name</label>
           <input
             type="text"
@@ -92,9 +97,9 @@ const Signup = () => {
             onChange={handleLastNameChange}
             required
           />
-        </div>
+        </InputWrapper>
 
-        <div className="form-group">
+        <InputWrapper>
           <label htmlFor="username">Username</label>
           <input
             type="text"
@@ -103,9 +108,9 @@ const Signup = () => {
             onChange={handleUsernameChange}
             required
           />
-        </div>
+        </InputWrapper>
 
-        <div className="form-group">
+        <InputWrapper>
           <label htmlFor="password">Password</label>
           <input
             type="password"
@@ -114,9 +119,9 @@ const Signup = () => {
             onChange={handlePasswordChange}
             required
           />
-        </div>
+        </InputWrapper>
 
-        <div className="form-group">
+        <InputWrapper>
           <label htmlFor="confirmPassword">Confirm Password</label>
           <input
             type="password"
@@ -125,16 +130,89 @@ const Signup = () => {
             onChange={handleConfirmPasswordChange}
             required
           />
-        </div>
+        </InputWrapper>
 
-        {error && <div className="error-message">{error}</div>}
+        {error && <ErrorMessage>{error}</ErrorMessage>}
+        {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
 
-        <button type="submit" disabled={loading}>
+        <SubmitButton type="submit" disabled={loading}>
           {loading ? 'Signing up...' : 'Sign Up'}
-        </button>
+        </SubmitButton>
       </form>
-    </div>
+    </SignupContainer>
   );
 };
+
+// Styled components
+
+const SignupContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  max-width: 400px;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+`;
+
+const InputWrapper = styled.div`
+  margin-bottom: 15px;
+  width: 100%;
+  
+  label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+  }
+
+  input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+  input:focus {
+    border-color: #5d5fe7;
+  }
+`;
+
+const ErrorMessage = styled.div`
+  color: red;
+  font-size: 14px;
+  margin-bottom: 15px;
+`;
+
+const SuccessMessage = styled.div`
+  color: green;
+  font-size: 14px;
+  margin-bottom: 15px;
+`;
+
+const SubmitButton = styled.button`
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #5d5fe7;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  
+  &:hover {
+    background-color: #4b4bdf;
+  }
+
+  &:disabled {
+    background-color: #c5c5e1;
+    cursor: not-allowed;
+  }
+`;
 
 export default Signup;

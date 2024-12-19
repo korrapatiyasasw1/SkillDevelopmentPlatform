@@ -8,6 +8,10 @@ import Dashboard from "../pages/Dashboard";
 import About from "../pages/About";
 import LandingPage from "../pages/LandingPage";
 import Internships from "../pages/Internships";
+import AdminSignup from "../pages/AdminSignup";
+import AdminLogin from "../pages/AdminLogin";
+import AdminDashBoard from "../pages/AdminDashBoard"
+import OurWebsite from "../pages/OurWebsite";
 function AppRouter() {
   const loggedUser = true;
   return (
@@ -25,8 +29,10 @@ function AppRouter() {
               {/* <Route path="/Dashboard/Profile" element={<Profile />} />  */}
              <Route path="/Dashboard/Home" element={<Home />} />
              <Route path="/Dashboard/Internships" element={<Internships />} />
-
-
+             <Route path="/AdminLogin" element={<AdminLogin/>} /> 
+             <Route path="/AdminSignup" element={<AdminSignup />} /> 
+             <Route path="/AdminDashBoard" element={<AdminDashBoard />} /> 
+            <Route path = "/Dashboard/OurWebsite" element= {<OurWebsite/>}></Route>
            </Routes>
            </MainLayout>
         )}  

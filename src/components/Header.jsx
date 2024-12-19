@@ -76,6 +76,21 @@ const Header = () => {
               Login
             </StyledNavLink>
           </li>
+          <li>
+            <StyledNavLink to="/AdminSignup" activeClassName="active">
+               AdminSignup
+            </StyledNavLink>
+          </li>
+          <li>
+            <StyledNavLink to="/Adminlogin" activeClassName="active">
+             AdminLogin
+            </StyledNavLink>
+          </li>
+          <li>
+            <StyledNavLink to="/AdminDashBoard" activeClassName="active">
+             AdminDashBoard
+            </StyledNavLink>
+          </li>
           {/* <li>
             <StyledNavLink to="/dashboard" activeClassName="active">
               Dashboard

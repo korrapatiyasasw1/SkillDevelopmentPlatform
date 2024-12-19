@@ -36,6 +36,12 @@ const GPA = styled.p`
   color: #6c757d;
 `;
 
+const Skills = styled.p`
+  margin: 10px 0;
+  font-size: 1rem;
+  color: #6c757d;
+`;
+
 const Button = styled.button`
   background-color: #007bff;
   color: white;
@@ -62,12 +68,19 @@ const ErrorMessage = styled.p`
   margin-top: 10px;
 `;
 
+const InfoMessage = styled.p`
+  color: #007bff;
+  font-weight: bold;
+  margin-top: 10px;
+`;
+
 const Internships = () => {
   const [internships, setInternships] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [appliedInternship, setAppliedInternship] = useState(null);
-  const [applied, setApplied] = useState(false);
+  const [userError, setUserError] = useState('');
+  const [userSuccess, setUserSuccess] = useState('');
 
   const user = JSON.parse(localStorage.getItem('user')); // Get user from localStorage
 
@@ -89,29 +102,45 @@ const Internships = () => {
 
   const handleApply = async (internship) => {
     if (!user) {
-      alert('Please log in to apply for internships.');
+      setUserError('Please log in to apply for internships.');
+      setUserSuccess('');
       return;
     }
 
     const userGPA = parseFloat(user.gpa10); // Assuming 'gpa10' field is used
 
+    // Check if user GPA is sufficient
     if (userGPA < internship.gpa) {
-      setAppliedInternship(null);
-      setApplied(false);
-      alert('Your GPA does not meet the minimum requirements for this internship.');
+      setUserError('Your GPA does not meet the minimum requirements for this internship.');
+      setUserSuccess('');
+      return;
+    }
+
+    // Check if user has required skills
+    const userSkills = user.skills || []; // Assuming skills are stored in user object
+    const requiredSkills = internship.Required ? internship.Required.split(',') : []; // Assuming required skills are a comma-separated string
+
+    const hasRequiredSkills = requiredSkills.every(skill => userSkills.includes(skill.trim()));
+
+    if (!hasRequiredSkills) {
+      setUserError('You do not have the required skills for this internship.');
+      setUserSuccess('');
       return;
     }
 
     setAppliedInternship(internship);
-    setApplied(true);
+    setUserError(''); // Clear any previous error
+    setUserSuccess(''); // Clear any previous success message
 
     try {
-      // Get current user data
+      // Get current user data from the backend
       const currentUser = await axios.get(`https://server-7tfl.onrender.com/users/${user.id}`);
       const appliedInternships = currentUser.data.appliedInternships || []; // Fetch applied internships
 
+      // Check if the user has already applied for this internship
       if (appliedInternships.includes(internship.id)) {
-        alert('You have already applied for this internship.');
+        setUserError('You have already applied for this internship.');
+        setUserSuccess('');
         return;
       }
 
@@ -119,18 +148,23 @@ const Internships = () => {
       const updatedInternships = [...appliedInternships, internship.id];
 
       // Update applied internships in the database
-      await axios.put(`https://server-7tfl.onrender.com/users/${user.id}`, {
+      await axios.patch(`https://server-7tfl.onrender.com/users/${user.id}`, {
         appliedInternships: updatedInternships,
       });
 
-      // Update localStorage
+      // Update localStorage with the new applied internships
       const updatedUser = { ...user, appliedInternships: updatedInternships };
       localStorage.setItem('user', JSON.stringify(updatedUser));
 
-      console.log('Successfully applied for the internship!');
+      // Store selected internship details in localStorage
+      const selectedInternship = { ...internship, appliedOn: new Date().toISOString() };
+      localStorage.setItem('selectedInternship', JSON.stringify(selectedInternship));
+
+      setUserSuccess(`You have successfully applied for the ${internship.title} internship!`);
     } catch (error) {
       console.error('Error applying for internship:', error);
-      alert('An error occurred while applying for the internship.');
+      setUserError('An error occurred while applying for the internship.');
+      setUserSuccess('');
     }
   };
 
@@ -149,18 +183,16 @@ const Internships = () => {
           <Card key={internship.id}>
             <Title>{internship.title}</Title>
             <GPA>Minimum GPA: {internship.gpa}</GPA>
-
+            <Skills>Required Skills: {internship.Required}</Skills>
             <Button onClick={() => handleApply(internship)}>Apply</Button>
           </Card>
         ))}
       </CardContainer>
 
-      {applied && appliedInternship && (
-        <SuccessMessage>
-          You have successfully applied for the {appliedInternship.title} internship!
-        </SuccessMessage>
-      )}
+      {userError && <ErrorMessage>{userError}</ErrorMessage>}
+      {userSuccess && <SuccessMessage>{userSuccess}</SuccessMessage>}
     </div>
   );
 };
+
 export default Internships;
