@@ -118,7 +118,7 @@ const Internships = () => {
 
     // Check if user has required skills
     const userSkills = user.skills || []; // Assuming skills are stored in user object
-    const requiredSkills = internship.Required ? internship.Required.split(',') : []; // Assuming required skills are a comma-separated string
+    const requiredSkills = internship.required ? internship.required.split(',') : []; // Ensure 'required' matches the property name
 
     const hasRequiredSkills = requiredSkills.every(skill => userSkills.includes(skill.trim()));
 
@@ -183,7 +183,7 @@ const Internships = () => {
           <Card key={internship.id}>
             <Title>{internship.title}</Title>
             <GPA>Minimum GPA: {internship.gpa}</GPA>
-            <Skills>Required Skills: {internship.Required}</Skills>
+            <Skills>Required Skills: {internship.required}</Skills>
             <Button onClick={() => handleApply(internship)}>Apply</Button>
           </Card>
         ))}

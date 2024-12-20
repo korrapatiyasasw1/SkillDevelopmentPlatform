@@ -86,11 +86,11 @@ const Header = () => {
              AdminLogin
             </StyledNavLink>
           </li>
-          <li>
+          {/* <li>
             <StyledNavLink to="/AdminDashBoard" activeClassName="active">
              AdminDashBoard
             </StyledNavLink>
-          </li>
+          </li> */}
           {/* <li>
             <StyledNavLink to="/dashboard" activeClassName="active">
               Dashboard

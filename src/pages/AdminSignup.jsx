@@ -1,7 +1,60 @@
-
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';  
+import styled from 'styled-components';
+
+// Styled components
+const SignInContainer = styled.div`
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+`;
+
+const FormGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Label = styled.label`
+  margin-bottom: 5px;
+  font-weight: bold;
+`;
+
+const Input = styled.input`
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+`;
+
+const ErrorMessage = styled.div`
+  color: red;
+  margin-bottom: 15px;
+  font-size: 14px;
+`;
+
+const Button = styled.button`
+  padding: 10px;
+  font-size: 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  &:disabled {
+    background-color: #ccc;
+  }
+`;
 
 const AdminSignup = () => {
   const navigate = useNavigate();  // Initialize the useNavigate hook
@@ -22,13 +75,12 @@ const AdminSignup = () => {
   const handlePasswordChange = (e) => setPassword(e.target.value);
   const handleConfirmPasswordChange = (e) => setConfirmPassword(e.target.value);
 
-  // Handle form submission (sign-in)
+  // Handle form submission (sign-up)
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Basic validation for form fields
-    if (!firstName || !lastName || !username || !password || !confirmPassword)
-       {
+    if (!firstName || !lastName || !username || !password || !confirmPassword) {
       setError('All fields are required.');
       return;
     }
@@ -71,73 +123,72 @@ const AdminSignup = () => {
   };
 
   return (
-    <div className="sign-in-container">
+    <SignInContainer>
       <h2>Sign Up</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="firstName">First Name</label>
-          <input
+      <Form onSubmit={handleSubmit}>
+        <FormGroup>
+          <Label htmlFor="firstName">First Name</Label>
+          <Input
             type="text"
             id="firstName"
             value={firstName}
             onChange={handleFirstNameChange}
             required
           />
-        </div>
+        </FormGroup>
 
-        <div className="form-group">
-          <label htmlFor="lastName">Last Name</label>
-          <input
+        <FormGroup>
+          <Label htmlFor="lastName">Last Name</Label>
+          <Input
             type="text"
             id="lastName"
             value={lastName}
             onChange={handleLastNameChange}
             required
           />
-        </div>
+        </FormGroup>
 
-        <div className="form-group">
-          <label htmlFor="username">Username</label>
-          <input
+        <FormGroup>
+          <Label htmlFor="username">Username</Label>
+          <Input
             type="text"
             id="username"
             value={username}
             onChange={handleUsernameChange}
             required
           />
-        </div>
+        </FormGroup>
 
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <input
+        <FormGroup>
+          <Label htmlFor="password">Password</Label>
+          <Input
             type="password"
             id="password"
             value={password}
             onChange={handlePasswordChange}
             required
           />
-        </div>
+        </FormGroup>
 
-        <div className="form-group">
-          <label htmlFor="confirmPassword">Confirm Password</label>
-          <input
+        <FormGroup>
+          <Label htmlFor="confirmPassword">Confirm Password</Label>
+          <Input
             type="password"
             id="confirmPassword"
             value={confirmPassword}
             onChange={handleConfirmPasswordChange}
             required
           />
-        </div>
+        </FormGroup>
 
-        {error && <div className="error-message">{error}</div>}
+        {error && <ErrorMessage>{error}</ErrorMessage>}
 
-        <button type="submit" disabled={loading}>
+        <Button type="submit" disabled={loading}>
           {loading ? 'Signing up...' : 'Sign Up'}
-        </button>
-      </form>
-    </div>
+        </Button>
+      </Form>
+    </SignInContainer>
   );
 };
-
 
 export default AdminSignup;

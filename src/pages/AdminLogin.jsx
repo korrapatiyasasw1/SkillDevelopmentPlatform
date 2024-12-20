@@ -28,15 +28,17 @@ const AdminLogin = () => {
     try {
       // Make a GET request to fetch users data
       const response = await axios.get('https://server-7tfl.onrender.com/Admins');
-      
+      //const res = await axios.get('https://server-7tfl.onrender.com/users');
+    //  await axios.post('https://server-7tfl.onrender.com/admins', res.data);
+
       // Find the user matching the entered username and password
       const user = response.data.find(
         (user) => user.username === username && user.password === password
       );
 
       // If user found and credentials match, store user data in localStorage and navigate to dashboard
-      if (Admins) {
-        localStorage.setItem('user', JSON.stringify(Admins));
+      if (user) {
+        localStorage.setItem('admin', JSON.stringify(user));  // Store the user data
         navigate('/AdminDashBoard');  // Redirect to dashboard after login
       } else {
         setError('Invalid username or password. Please try again.');
