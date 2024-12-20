@@ -144,7 +144,7 @@ const Dashboard = () => {
             <NavLink to="/dashboard/opportunities">Opportunities</NavLink>
           </li>
           <li>
-            <NavLink to="/dashboard/Home">Home</NavLink>
+            <NavLink to="/dashboard/Home">Profile</NavLink>
           </li>
           <li>
             <NavLink to="/dashboard/About">About</NavLink>
@@ -163,9 +163,9 @@ const Dashboard = () => {
               <NavLink to="/dashboard/logout">Logout</NavLink>
             )}
           </li>
-          <li>
+          {/* <li>
             <NavLink to="/dashboard/profile">Profile</NavLink>
-          </li>
+          </li> */}
         </ul>
       </Sidebar>
 
@@ -187,7 +187,7 @@ const Dashboard = () => {
             </div>
             <div className="stat-item">
               <h3>Profile Completion</h3>
-              <p>80% Complete</p> {/* Example value */}
+              <p>80% Complete</p> 
             </div>
           </Stats>
         </div>
