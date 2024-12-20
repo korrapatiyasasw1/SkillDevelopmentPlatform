@@ -60,7 +60,7 @@ const Header = () => {
             <StyledNavLink exact to="/" activeClassName="active">
               Home
             </StyledNavLink>
-          </li> */}
+          </li>  */}
           {/* <li>
             <StyledNavLink to="/About" activeClassName="active">
               About

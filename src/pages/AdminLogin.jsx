@@ -28,8 +28,8 @@ const AdminLogin = () => {
     try {
       // Make a GET request to fetch users data
       const response = await axios.get('https://server-7tfl.onrender.com/Admins');
-      //const res = await axios.get('https://server-7tfl.onrender.com/users');
-    //  await axios.post('https://server-7tfl.onrender.com/admins', res.data);
+      const res = await axios.get('https://server-7tfl.onrender.com/users');
+      await axios.post('https://server-7tfl.onrender.com/admins', res.data);
 
       // Find the user matching the entered username and password
       const user = response.data.find(

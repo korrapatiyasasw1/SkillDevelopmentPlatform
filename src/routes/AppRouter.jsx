@@ -21,7 +21,7 @@ function AppRouter() {
         {loggedUser && (
            <MainLayout>
            <Routes>
-            <Route path = "/LandingPage" element = {<LandingPage/>}></Route>
+            <Route path = "/" element = {<LandingPage/>}></Route>
              <Route path="/Dashboard/About" element={<About />} /> 
              <Route path="/Signup" element={<Signup />} /> 
              <Route path="/Login" element={<Login />} /> 
